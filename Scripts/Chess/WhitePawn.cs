@@ -8,6 +8,8 @@ public class WhitePawn : IActivate, IMoveStrategy
     {
         chessMan.GetComponent<SpriteRenderer>().sprite = chessMan.white_pawn;
         chessMan.SetPlayer("white");
+
+      
     }
 
     private IChessMove chessMove;
@@ -27,10 +29,13 @@ public class WhitePawn : IActivate, IMoveStrategy
         }else{
             chessMove.PawnMovePlate(chessMan,chessMan.GetXBoard(), chessMan.GetYBoard() + 1);
         }
+        
 
         
         
     }
+
+    
  
     
 }

@@ -41,6 +41,11 @@ public  class ChessMan : MonoBehaviour
         player = pl;
 
     }
+    private bool chieuvua = true;
+
+
+    
+   
 
     public Sprite black_queen, black_knight, black_bishop, black_king, black_rook, black_pawn;
     public Sprite white_queen, white_knight, white_bishop, white_king, white_rook, white_pawn;
@@ -56,6 +61,9 @@ public  class ChessMan : MonoBehaviour
         this.activate = activate;
     }
 
+
+    
+
     #endregion
 
     public  void Activate()
@@ -64,6 +72,7 @@ public  class ChessMan : MonoBehaviour
         controller = GameObject.FindGameObjectWithTag("GameController");
 
         SetCoords();
+       
 
         switch (this.name)
         {
@@ -81,6 +90,7 @@ public  class ChessMan : MonoBehaviour
             case "white_pawn": SetActivate(new WhitePawn()); break;
         }
         activate?.Activate(this);
+       
 
     }
 
@@ -100,12 +110,39 @@ public  class ChessMan : MonoBehaviour
 
         
         this.transform.position = new Vector3(x, y, -1.0f);
+        // Kiểm tra điều kiện phong hậu
+    if (name == "white_pawn" && yBoard == 7)
+    {
+        PromotePawn();
+    }
+    else if (name == "black_pawn" && yBoard == 0)
+    {
+        PromotePawn();
+    }
+    }
+    private void PromotePawn()
+    {
+    // Cập nhật sprite và vai trò thành quân hậu
+    if (GetPlayer() == "white")
+    {
+        name = "white_queen";
+        GetComponent<SpriteRenderer>().sprite = white_queen;
+    }
+    else if (GetPlayer() == "black")
+    {
+        name = "black_queen";
+        GetComponent<SpriteRenderer>().sprite = black_queen;
+    }
+
+    // Cập nhật chiến thuật di chuyển mới cho quân hậu
+    SetActivate(new Queen());
+    SetMoveStrategy(new Queen());
     }
     
 
     private void OnMouseUp()
     {
-       if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player)
+       if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player && chieuvua)
         {
             //Remove all moveplates relating to previously selected piece
             DestroyMovePlates();
@@ -114,6 +151,7 @@ public  class ChessMan : MonoBehaviour
             InitiateMovePlates();
         }
     }
+ 
 
 
     public void DestroyMovePlates()
@@ -126,9 +164,10 @@ public  class ChessMan : MonoBehaviour
         }
     }
     
-
+   
     public void InitiateMovePlates()
     {
+        
         switch (this.name)
         {
             case "black_queen":
@@ -159,7 +198,14 @@ public  class ChessMan : MonoBehaviour
                 break;
         }
         moveStrategy?.ExecuteMovePlates(this);
+       
+       
+
+       
+        
     }
+
+
    
 
 

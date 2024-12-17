@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 
 
 public class Game : MonoBehaviour
 {
+   
 
     public GameObject chesspiece;
 
@@ -17,11 +20,19 @@ public class Game : MonoBehaviour
 
     private string currentPlayer = "white";
 
+    [SerializeField ]private Timer timer;
+    private Text playerText; // UI Text to display current player's turn
+    
+   
+
+
+
     private bool gameOver = false;
 
     // Start is called before the first frame update
     void Start()
     {
+    
         playerWhite = new GameObject[] { Create("white_rook", 0, 0), Create("white_knight", 1, 0),
             Create("white_bishop", 2, 0), Create("white_queen", 3, 0), Create("white_king", 4, 0),
             Create("white_bishop", 5, 0), Create("white_knight", 6, 0), Create("white_rook", 7, 0),
@@ -41,6 +52,7 @@ public class Game : MonoBehaviour
             SetPosition(playerBlack[i]);
             SetPosition(playerWhite[i]);
         }
+        
         
     }
     public GameObject Create(string name, int x, int y)
@@ -89,25 +101,64 @@ public class Game : MonoBehaviour
 
     public void NextTurn()
     {
-        if (currentPlayer == "white")
+        if (currentPlayer == "white" )
         {
             currentPlayer = "black";
+           
         }
         else
         {
             currentPlayer = "white";
+            
+
+        }
+
+        timer.ResetTime();
+        //UpdatePlayerTurnUI();
+      
+        
+    
+
+        
+    }
+    private void UpdatePlayerTurnUI()
+{
+    GameObject playerTextObj = GameObject.FindGameObjectWithTag("PlayerText");
+    if (playerTextObj != null)
+    {
+        Text playerText = playerTextObj.GetComponent<Text>();
+        if (playerText != null)
+        {
+            playerText.text = currentPlayer == "white" ? "White Turn" : "Black Turn";
+        }
+        else
+        {
+            Debug.LogError("Text component is missing on the PlayerText GameObject!");
         }
     }
+    else
+    {
+        Debug.LogError("No GameObject with tag 'PlayerText' found in the scene!");
+    }
+}
+
 
     public void Update()
     {
-        if (gameOver == true && Input.GetMouseButtonDown(0))
+         if (timer.remainingTime <= 0)
+    {
+        Winner(currentPlayer == "white" ? "black" : "white");
+        //return; // Tránh tiếp tục Update khi đã gọi Winner
+    }
+       
+        if (gameOver == true && Input.GetMouseButtonDown(0) )
         {
             gameOver = false;
 
             //Using UnityEngine.SceneManagement is needed here
             SceneManager.LoadScene("Game"); //Restarts the game by loading the scene over again
         }
+       
     }
 
     public void Winner(string playerWinner)
@@ -120,6 +171,10 @@ public class Game : MonoBehaviour
 
         GameObject.FindGameObjectWithTag("RestartText").GetComponent<Text>().enabled = true;
     }
+
+    
+
+    
 
 
    

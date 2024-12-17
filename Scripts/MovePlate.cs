@@ -11,6 +11,7 @@ public class MovePlate : MonoBehaviour
     GameObject reference = null;
 
     //Location on the board
+    //
     int matrixX;
     int matrixY;
 
