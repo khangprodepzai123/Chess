@@ -52,10 +52,13 @@ public class MovePlate : MonoBehaviour
         reference.GetComponent<ChessMan>().SetCoords();
 
         //Update the matrix
-        controller.GetComponent<Game>().SetPosition(reference);
+        //controller.GetComponent<Game>().SetPosition(reference); origin
+        controller.GetComponent<Game>().SetPosition(reference, matrixX, matrixY);
+        
 
         //Switch Current Player
-        controller.GetComponent<Game>().NextTurn();
+        controller.GetComponent<Game>().NextTurn(); 
+       
 
         //Destroy the move plates including self
         reference.GetComponent<ChessMan>().DestroyMovePlates();

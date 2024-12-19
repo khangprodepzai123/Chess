@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public  class ChessMan : MonoBehaviour
+/*public  class ChessMan : MonoBehaviour
 {
     public GameObject controller;
     public GameObject movePlate;
+
+    private Game gameController; // Tham chiếu đến lớp Game
+    private TurnManager turnManager; // Quản lý lượt chơi
   
 
 
@@ -151,6 +154,9 @@ public  class ChessMan : MonoBehaviour
             InitiateMovePlates();
         }
     }
+    
+
+    
  
 
 
@@ -215,4 +221,152 @@ public  class ChessMan : MonoBehaviour
 
 
    
+}*/
+
+
+public  class ChessMan : MonoBehaviour
+{
+    public GameObject controller;
+    public GameObject movePlate;
+
+    private Game gameController; // Tham chiếu đến lớp Game
+    private PawnPromotionManager pawnPromotionManager;
+    private PositionManager positionManager;
+    private PieceActivator pieceActivator;
+    private MovePlateManager movePlateManager;
+
+    private IMoveStrategy moveStrategy;
+
+     public IMoveStrategy GetMoveStrategy(){
+        return moveStrategy;
+    }
+    public void SetMoveStrategy(IMoveStrategy strategy)
+    {
+        this.moveStrategy = strategy;
+    }
+    private IActivate activate;
+    public IActivate GetActivate()
+    {
+        return activate;
+    }
+
+    public void SetActivate(IActivate activate){
+        this.activate = activate;
+    }
+    private int xBoard = -1;
+    private int yBoard = -1;
+    public int GetXBoard()
+    {
+        return xBoard;
+    }
+
+    public int GetYBoard()
+    {
+        return yBoard;
+    }
+
+    public void SetXBoard(int x)
+    {
+        xBoard = x;
+    }
+
+    public void SetYBoard(int y)
+    {
+        yBoard = y;
+    }
+
+    
+
+    protected string player;
+    public string GetPlayer(){
+        return player;
+    }
+    public void SetPlayer(string pl){
+        player = pl;
+
+    }
+    private bool chieuvua = true;
+
+
+    
+   
+
+    public Sprite black_queen, black_knight, black_bishop, black_king, black_rook, black_pawn;
+    public Sprite white_queen, white_knight, white_bishop, white_king, white_rook, white_pawn;
+
+    #region 
+
+   
+
+    
+
+    #endregion
+    
+    void Awake()
+    {
+        // Khởi tạo PositionManager ngay khi ChessMan được tạo
+        pawnPromotionManager = new PawnPromotionManager(white_queen, black_queen);
+        positionManager = new PositionManager(this);
+        pieceActivator = new PieceActivator(this);
+        movePlateManager = new MovePlateManager();
+
+    }
+
+
+    public void Activate()
+    {
+        controller = GameObject.FindGameObjectWithTag("GameController");
+
+        SetCoords();
+        pieceActivator.Activate();
+
+
+    }
+
+   
+
+
+
+    public virtual void SetCoords()
+    {
+        
+        positionManager.SetCoords();
+
+    }
+    public void PromotePawn()
+    {
+        pawnPromotionManager.PromotePawn(this);
+    }
+    
+
+    private void OnMouseUp()
+    {
+       if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player && chieuvua)
+        {
+            //Remove all moveplates relating to previously selected piece
+            DestroyMovePlates();
+
+            //Create new MovePlates
+            InitiateMovePlates();
+        }
+    }
+ 
+    public void DestroyMovePlates(){
+        movePlateManager.DestroyMovePlates();
+
+    }
+    
+   
+    
+    public void InitiateMovePlates()
+    {
+        movePlateManager.InitiateMovePlates(this);
+        
+   
+        
+    }
+
+
+   
 }
+

@@ -152,36 +152,7 @@ public class ChessMoveImplementation : IChessMove
         mpScript.SetReference(chessMan.gameObject);
         mpScript.SetCoords(matrixX, matrixY);
     }
-    /*public void WhiteCastle(ChessMan chessMan, int x, int y)
-    {
-    Game sc = chessMan.controller.GetComponent<Game>();
-
-    // Vị trí ban đầu của vua và xe trắng
-    if (chessMan.GetXBoard() == 4 && chessMan.GetYBoard() == 0)
-    {
-        // Nhập thành cánh vua (King-side castle)
-        if (sc.GetPosition(7, 0) != null && sc.GetPosition(7, 0).GetComponent<ChessMan>().name == "white_rook")
-        {
-            if (sc.GetPosition(5, 0) == null && sc.GetPosition(6, 0) == null)
-            {
-                // Thực hiện di chuyển nhập thành
-                MovePlateSpawn(chessMan, 6, 0); // Di chuyển vua đến vị trí nhập thành
-                MovePlateSpawn(sc.GetPosition(7, 0).GetComponent<ChessMan>(), 5, 0); // Di chuyển xe
-            }
-        }
-
-        // Nhập thành cánh hậu (Queen-side castle)
-        if (sc.GetPosition(0, 0) != null && sc.GetPosition(0, 0).GetComponent<ChessMan>().name == "white_rook")
-        {
-            if (sc.GetPosition(1, 0) == null && sc.GetPosition(2, 0) == null && sc.GetPosition(3, 0) == null)
-            {
-                // Thực hiện di chuyển nhập thành
-                MovePlateSpawn(chessMan, 2, 0); // Di chuyển vua đến vị trí nhập thành
-                MovePlateSpawn(sc.GetPosition(0, 0).GetComponent<ChessMan>(), 3, 0); // Di chuyển xe
-            }
-        }
-    }
-    }*/
+    
     public void WhiteCastle(ChessMan chessMan)
     {
         Game sc = chessMan.controller.GetComponent<Game>();
